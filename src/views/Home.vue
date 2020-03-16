@@ -7,14 +7,18 @@
       li 📆 Calendar
       li 🏠 Tasks
       hr.my-2
+      li 🏃‍♂️ Health
+      li 🎓 Studying
+      li 👔 Work
+      li 💡 Dev blog
   
   .main-content
 
     .header
       span(contenteditable="true").text-2xl.font-semibold 🏃‍♂️ Health
-      .text-center.flex.justify-center.items-center
-        div.bg-red-400.rounded.cursor-pointer.text-xl.w-10.h-auto.py-1.ml-3 💡
-        div.bg-red-400.rounded.cursor-pointer.text-xl.w-10.h-auto.py-1.ml-3 💬
+      .actions-wrapper
+        .header-action 💡
+        .header-action 💬
     
     .list-grid
       .card(v-for="todo in todoList" v-bind:key="todo.id")
@@ -25,7 +29,7 @@
     .p-4.flex-grow-0.opacity-75
       .rounded.bg-gray-200.shadow.flex.items-center.p-4.mb-1
         span.mr-4 +
-        input(placeholder="Add a task", v-model="newTask", v-on:keyup.enter="test").flex-grow.text-left
+        input(placeholder="Add a task", v-model="newTask", v-on:keyup.enter="test").flex-grow.text-left.bg-transparent
 
 </template>
 
@@ -73,6 +77,12 @@ ul.menu li:hover {
 }
 .header {
   @apply flex justify-between text-white py-6;
+}
+.actions-wrapper {
+  @apply text-center flex justify-center items-center
+}
+.header-action {
+  @apply bg-red-400 rounded cursor-pointer text-xl w-10 h-auto py-1 ml-3
 }
 .list-grid {
   @apply flex flex-col h-full flex-grow;
