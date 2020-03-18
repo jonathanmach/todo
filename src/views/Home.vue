@@ -1,7 +1,13 @@
 <template lang="pug">
 .flex
-  .navmenu
-    ul.menu
+  .navmenu.flex.flex-col.min-h-screen
+    .flex.px-4.items-center
+      span.text-3xl 🧔🏽
+      .pl-3.text-sm
+        p Jonathan Machado
+        p.text-xs machadofjonathan@gmail.com
+    hr.my-2
+    ul.menu.flex-grow
       li 📥 Inbox
       li ⭐ Important
       li 📆 Calendar
@@ -11,6 +17,10 @@
       li 🎓 Studying
       li 👔 Work
       li 💡 Dev blog
+    .flex-grow-0.border.justify-between.h-10.flex.items-center.px-4
+      .span.text-sm.cursor-pointer ➕ New list
+      .span.text-sm.cursor-pointer +🎯
+      
   
   .main-content
 
@@ -23,13 +33,18 @@
     .list-grid
       .card(v-for="todo in todoList" v-bind:key="todo.id")
         input.mr-4(type="radio")
-        span.flex-grow.text-left {{todo.title}}
+        span.flex-grow.text-left.outline-none(contenteditable="true") {{todo.title}}
         span.star.opacity-25 ⭐
 
-    .p-4.flex-grow-0.opacity-75
+    //- @todo - Add a Fab on mobile instead of showing the New Task dialog by default
+    //- .fab(@click="showNewTaskDialog = !showNewTaskDialog").absolute.bottom-0.right-0.m-8
+    //-   .h-12.w-12.bg-white.rounded-full.flex.items-center
+    //-     span.mx-auto +
+
+    .new-task.pb-4.flex-grow-0.opacity-75
       .rounded.bg-gray-200.shadow.flex.items-center.p-4.mb-1
-        span.mr-4 +
-        input(placeholder="Add a task", v-model="newTask", v-on:keyup.enter="test").flex-grow.text-left.bg-transparent
+        span.mr-4 ➕
+        input(placeholder="Add a task", v-model="newTask", v-on:keyup.enter="test").flex-grow.text-left.bg-transparent.outline-none
 
 </template>
 
@@ -48,6 +63,7 @@ export default {
   data() {
     return {
       newTask: null,
+      showNewTaskDialog: false,
       todoList: [
         { title: "Bike ride", id: 1 },
         { title: "Gym @ the morning", id: 1 }
@@ -65,30 +81,37 @@ ul.menu li:hover {
   @apply bg-gray-200;
 }
 .navmenu {
-  @apply w-64 h-full pt-10 text-left hidden;
+  @apply w-64 h-full pt-4 text-left hidden;
 }
 @screen md {
   .navmenu {
     @apply block;
   }
+  .fab {
+    @apply invisible;
+  }
 }
+
 .main-content {
-  @apply bg-gray-200 flex flex-col h-screen bg-red-500 flex-grow p-4 px-10;
+  @apply bg-gray-200 flex flex-col h-screen bg-red-500 flex-grow p-4 px-8;
 }
 .header {
   @apply flex justify-between text-white py-6;
 }
 .actions-wrapper {
-  @apply text-center flex justify-center items-center
+  @apply text-center flex justify-center items-center;
 }
 .header-action {
-  @apply bg-red-400 rounded cursor-pointer text-xl w-10 h-auto py-1 ml-3
+  @apply bg-red-400 rounded cursor-pointer text-xl w-10 h-auto py-1 ml-3;
 }
 .list-grid {
   @apply flex flex-col h-full flex-grow;
 }
 .card {
   @apply rounded bg-white shadow flex items-center p-4 mb-1;
+}
+.card:hover {
+  @apply shadow-xl bg-gray-200;
 }
 .star {
   cursor: pointer;
