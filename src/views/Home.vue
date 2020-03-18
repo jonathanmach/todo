@@ -2,9 +2,9 @@
 .flex
   .navmenu.flex.flex-col.min-h-screen
     .flex.px-4.items-center
-      span.text-3xl 🧔🏽
+      span.text-3xl 🧑🏽
       .pl-3.text-sm
-        p Jonathan Machado
+        p Jonathan
         p.text-xs machadofjonathan@gmail.com
     hr.my-2
     ul.menu.flex-grow
@@ -13,25 +13,27 @@
       li 📆 Calendar
       li 🏠 Tasks
       hr.my-2
-      li 🏃‍♂️ Health
       li 🎓 Studying
       li 👔 Work
       li 💡 Dev blog
-    .flex-grow-0.border.justify-between.h-10.flex.items-center.px-4
-      .span.text-sm.cursor-pointer ➕ New list
+      li(v-for="list in todoListArray" v-bind:key="list.id", contenteditable="true") {{list.title}}
+    
+    //- Add new TodoList
+    .flex-grow-0.border.justify-between.h-12.flex.items-center.px-4
+      .span.text-sm.cursor-pointer(@click="addNewList()") ➕ New list
       .span.text-sm.cursor-pointer +🎯
       
   
   .main-content
 
     .header
-      span(contenteditable="true").text-2xl.font-semibold 🏃‍♂️ Health
+      span(contenteditable="true").text-2xl.font-semibold.flex-grow.text-left 🏃‍♂️ Health
       .actions-wrapper
         .header-action 💡
         .header-action 💬
     
     .list-grid
-      .card(v-for="todo in todoList" v-bind:key="todo.id")
+      .card(v-for="todo in todoArray" v-bind:key="todo.id")
         input.mr-4(type="radio")
         span.flex-grow.text-left.outline-none(contenteditable="true") {{todo.title}}
         span.star.opacity-25 ⭐
@@ -42,7 +44,7 @@
     //-     span.mx-auto +
 
     .new-task.pb-4.flex-grow-0.opacity-75
-      .rounded.bg-gray-200.shadow.flex.items-center.p-4.mb-1
+      .rounded.bg-gray-200.shadow.flex.items-center.p-4
         span.mr-4 ➕
         input(placeholder="Add a task", v-model="newTask", v-on:keyup.enter="test").flex-grow.text-left.bg-transparent.outline-none
 
@@ -50,30 +52,41 @@
 
 <script>
 // @ is an alias to /src
+import TodoList from "@/models/TodoList";
+import Todo from "@/models/Todo";
 
 export default {
   name: "Home",
   components: {},
   methods: {
     test() {
-      this.todoList.push({ title: this.newTask, id: 2 });
+      const fakeTodo = { title: this.newTask, list: 2 };
+      Todo.insert({ data: fakeTodo });
       this.newTask = null;
+    },
+    addNewList() {
+      const fakeList = { title: "🤸‍♂️ Untitled" };
+      TodoList.insert({ data: fakeList });
+    }
+  },
+  computed: {
+    todoArray() {
+      return Todo.all()
+    },
+    todoListArray(){
+      return TodoList.all()
     }
   },
   data() {
     return {
       newTask: null,
       showNewTaskDialog: false,
-      todoList: [
-        { title: "Bike ride", id: 1 },
-        { title: "Gym @ the morning", id: 1 }
-      ]
     };
   }
 };
 </script>
 
-<style >
+<style>
 ul.menu li {
   @apply pb-4 py-3 pl-4;
 }
@@ -108,7 +121,7 @@ ul.menu li:hover {
   @apply flex flex-col h-full flex-grow;
 }
 .card {
-  @apply rounded bg-white shadow flex items-center p-4 mb-1;
+  @apply rounded bg-white shadow flex items-center p-4 mb-1 cursor-pointer;
 }
 .card:hover {
   @apply shadow-xl bg-gray-200;
